@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코드깎는노인 클래스 - 셀렉터 플레이그라운드</title>
+    <style>
+        /* 전체 화면 높이를 사용하도록 설정 */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Flex 컨테이너 설정 */
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* 입력란 스타일 */
+        #css-selector-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+            font-family: monospace;
+        }
+
+        /* 코드 에디터가 남은 공간을 모두 차지하도록 설정 */
+        .editor-container {
+            flex: 1;
+            min-height: 0;
+            /* Flex 레이아웃에서 필요 */
+        }
+
+        /* 에디터 전체 크기 설정 */
+        .cm-editor {
+            height: 100%;
+        }
+
+        /* 제목 스타일링 */
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #fff;
+            margin: 0;
+            padding: 15px 10px;
+            background: linear-gradient(45deg, #f3ec78, #af4261);
+        }
+
+        /* 부제목 스타일 */
+        .subtitle,
+        .subtitle a {
+            text-align: center;
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0;
+            padding: 0px;
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        /* 반응형 디자인을 위한 미디어 쿼리 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+                padding: 10px 5px;
+            }
+
+            #css-selector-input {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .container {
+                padding: 0 5px;
+            }
+        }
+
+        body {
+            background-color: #282c34;
+        }
+
+        /* 고정 헤더 스타일 */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #282c34;
+            z-index: 1000;
+        }
+
+
+        /* 기존 container 스타일 수정 */
+        .container {
+            display: block; /* flex에서 block으로 변경 */
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="fixed-header">
+            <h1>셀렉터 플레이그라운드
+                <p class="subtitle"><a href="https://cokac.com/" target="_blank">by 코드깎는노인 클래스</a></p>
+            </h1>
+            <input type="text" id="css-selector-input" autocomplete="off"
+                placeholder="CSS 선택자 입력 (예: #section1, .list-items, header > nav)" value="" />
+        </div>
+        <div class="editor-container">
+            <div id="code-editor"></div>
+        </div>
+
+        <script>
+            function adjustEditorMargin() {
+                const header = document.querySelector('.fixed-header');
+                const editorContainer = document.querySelector('.editor-container');
+                const headerHeight = header.offsetHeight;
+                editorContainer.style.marginTop = `${headerHeight}px`;
+            }
+
+            // 페이지 로드 시 실행
+            window.addEventListener('load', adjustEditorMargin);
+
+            // 창 크기 변경 시 실행
+            window.addEventListener('resize', adjustEditorMargin);
+        </script>
+    </div>
+
+</body>
+
+</html>
