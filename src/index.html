@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>코드깎는노인 클래스 - 셀렉터 플레이그라운드</title>
     <style>
         /* 전체 화면 높이를 사용하도록 설정 */
@@ -31,6 +31,7 @@
             border-bottom: 1px solid #ccc;
             outline: none;
             font-family: monospace;
+            border-radius: 0;
         }
 
         /* 코드 에디터가 남은 공간을 모두 차지하도록 설정 */
@@ -101,7 +102,8 @@
 
         /* 기존 container 스타일 수정 */
         .container {
-            display: block; /* flex에서 block으로 변경 */
+            display: block;
+            /* flex에서 block으로 변경 */
             height: auto;
         }
     </style>
@@ -133,6 +135,12 @@
 
             // 창 크기 변경 시 실행
             window.addEventListener('resize', adjustEditorMargin);
+
+            document.addEventListener('touchstart', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
         </script>
     </div>
 
