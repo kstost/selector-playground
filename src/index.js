@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (e) {
                 console.error('선택자 파싱 중 오류 발생:', e);
                 // 인풋박스 텍스트를 빨갛게 만듦
-                cssSelectorInput.style.color = 'red';
+                cssSelectorInput.style.color = '#FF6666';
 
                 // 하이라이트 제거
                 codeEditor.dispatch({

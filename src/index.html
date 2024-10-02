@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>코드깎는노인 클래스 - 셀렉터 플레이그라운드</title>
+    <title>코드깎는노인 클래스 - CSS 셀렉터 연습장</title>
+    <meta property="og:image" content="https://cokac.com/selector/og_image.jpg">
+    <meta property="og:title" content="코드깎는노인 클래스 - CSS 셀렉터 연습장">
+    <meta property="og:description" content="CSS 셀렉터를 연습하고 배울 수 있는 인터랙티브 플레이그라운드입니다.">
+    <meta property="og:url" content="https://cokac.com/selector">
+    <meta property="og:type" content="website">
     <style>
         /* 전체 화면 높이를 사용하도록 설정 */
         html,
@@ -28,10 +33,16 @@
             font-size: 16px;
             box-sizing: border-box;
             border: none;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 0px solid #ccc;
             outline: none;
             font-family: monospace;
             border-radius: 0;
+            background-color: #535963;
+            color: #fff;
+
+            ::placeholder {
+                color: rgba(255, 255, 255, 0.5);
+            }
         }
 
         /* 코드 에디터가 남은 공간을 모두 차지하도록 설정 */
@@ -48,12 +59,34 @@
 
         /* 제목 스타일링 */
         h1 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #fff;
-            margin: 0;
-            padding: 15px 10px;
-            background: linear-gradient(45deg, #f3ec78, #af4261);
+            /* 기존 스타일 유지 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .title-container img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .main-title {
+            font-size: 0.9em;
+            line-height: 30px;
+            /* 이미지 높이와 동일하게 설정 */
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .subtitle {
+            margin: 5px 0 0 0;
+            font-size: 0.5em;
+            line-height: 1;
         }
 
         /* 부제목 스타일 */
@@ -61,7 +94,7 @@
         .subtitle a {
             text-align: center;
             font-size: 0.7em;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.3);
             margin: 0;
             padding: 0px;
             font-style: italic;
@@ -71,8 +104,23 @@
         /* 반응형 디자인을 위한 미디어 쿼리 */
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.8em;
-                padding: 10px 5px;
+                font-size: 1.5em;
+                padding: 8px 10px;
+            }
+
+            .title-container img {
+                width: 24px;
+                height: 24px;
+            }
+
+            .main-title {
+                font-size: 0.9em;
+                line-height: 24px;
+                /* 축소된 이미지 높이와 동일하게 설정 */
+            }
+
+            .subtitle {
+                font-size: 0.4em;
             }
 
             #css-selector-input {
@@ -95,11 +143,11 @@
             top: 0;
             left: 0;
             right: 0;
-            background-color: #282c34;
+            background-color: #333a47;
             z-index: 1000;
         }
 
-        /* 기존 container 스타일 수정 */
+        /* 기존 container 스타 수정 */
         .container {
             display: block;
             /* flex에서 block으로 변경 */
@@ -256,7 +304,11 @@
 <body>
     <div class="container">
         <div class="fixed-header">
-            <h1>셀렉터 플레이그라운드
+            <h1>
+                <div class="title-container">
+                    <img src="https://cokac.com/android-icon-192x192.png" alt="코드깎는노인 클래스" width="30" height="30">
+                    <span class="main-title">CSS 셀렉터 연습장</span>
+                </div>
                 <p class="subtitle"><a href="https://cokac.com/" target="_blank">by 코드깎는노인 클래스</a></p>
             </h1>
             <input type="text" id="css-selector-input" autocomplete="off"
