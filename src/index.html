@@ -38,7 +38,7 @@
         .editor-container {
             flex: 1;
             min-height: 0;
-            /* Flex 레이아웃에서 필요 */
+            /* Flex 레아웃에서 필요 */
         }
 
         /* 에디터 전체 크기 설정 */
@@ -99,12 +99,156 @@
             z-index: 1000;
         }
 
-
         /* 기존 container 스타일 수정 */
         .container {
             display: block;
             /* flex에서 block으로 변경 */
             height: auto;
+        }
+
+        /* 메뉴 아이콘 스타일 */
+        .menu-icon {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+            cursor: pointer;
+            font-size: 24px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* 사이드 패널 스타일 수정 */
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: -33.33%;
+            width: 33.33%;
+            height: 100%;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: right 0.3s ease-in-out;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 14px;
+            box-sizing: border-box;
+        }
+
+        .side-panel h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .selector-item {
+            cursor: pointer;
+            margin-bottom: 14px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .selector-item h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+
+        .selector-item p {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        /* 모바일 버전 스타일 수정 */
+        @media (max-width: 768px) {
+            .side-panel {
+                top: 100%;
+                right: 0;
+                width: 100%;
+                height: 33.33%;
+                transition: top 0.3s ease-in-out;
+                border-top: 2px solid rgba(255, 255, 255, 0.2);
+                padding: 15px;
+            }
+
+            .side-panel h2 {
+                font-size: 1.3em;
+                margin-bottom: 15px;
+            }
+
+            .selector-item {
+                margin-bottom: 15px;
+                padding: 8px;
+            }
+
+            .selector-item h3 {
+                font-size: 1.1em;
+            }
+
+            .selector-item p {
+                font-size: 0.8em;
+            }
+        }
+
+        .side-panel.open {
+            right: 0;
+        }
+
+        /* 메인 콘텐츠 영역 스타일 수정 */
+        .main-content {
+            width: 100%;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .main-content.shrink {
+            width: 66.67%;
+        }
+
+        /* 애니메이션 클래스 */
+        .animate-side-panel {
+            transition: right 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
+
+        /* 모바일 버전 스타일 수정 */
+        @media (max-width: 768px) {
+            .side-panel {
+                top: 100%;
+                right: 0;
+                width: 100%;
+                height: 33.33%;
+                transition: top 0.3s ease-in-out;
+                border-top: 2px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .side-panel.open {
+                top: 66.67%;
+            }
+
+            .main-content.shrink {
+                width: 100%;
+                height: 66.67%;
+                transition: height 0.3s ease-in-out;
+            }
+        }
+
+        /* 모바일 아닌 버전 스타일 수정 */
+        @media (min-width: 768px) {
+            .side-panel {
+                /* display: none; */
+                border-left: 2px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+
+
+        /* 애니메이션 중지를 위한 클래스 */
+        .resize-animation-stopper * {
+            transition: none !important;
         }
     </style>
 </head>
@@ -118,30 +262,15 @@
             <input type="text" id="css-selector-input" autocomplete="off"
                 placeholder="CSS 선택자 입력 (예: #section1, .list-items, header > nav)" value="" />
         </div>
-        <div class="editor-container">
-            <div id="code-editor"></div>
+        <div class="menu-icon">☰</div>
+        <div class="main-content">
+            <div class="editor-container">
+                <div id="code-editor"></div>
+            </div>
         </div>
-
-        <script>
-            function adjustEditorMargin() {
-                const header = document.querySelector('.fixed-header');
-                const editorContainer = document.querySelector('.editor-container');
-                const headerHeight = header.offsetHeight;
-                editorContainer.style.marginTop = `${headerHeight}px`;
-            }
-
-            // 페이지 로드 시 실행
-            window.addEventListener('load', adjustEditorMargin);
-
-            // 창 크기 변경 시 실행
-            window.addEventListener('resize', adjustEditorMargin);
-
-            document.addEventListener('touchstart', function (event) {
-                if (event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
-        </script>
+        <div class="side-panel">
+            <!-- 여기에 사이드 패널 내용을 추가하세요 -->
+        </div>
     </div>
 
 </body>

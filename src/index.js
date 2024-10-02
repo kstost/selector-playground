@@ -15,19 +15,19 @@ const setHighlights = StateEffect.define();
 
 // 데코레이션을 위한 StateField 정의
 const highlightField = StateField.define({
-  create() {
-    return Decoration.none;
-  },
-  update(decorations, tr) {
-    decorations = decorations.map(tr.changes);
-    for (let e of tr.effects) {
-      if (e.is(setHighlights)) {
-        decorations = e.value;
-      }
-    }
-    return decorations;
-  },
-  provide: f => EditorView.decorations.from(f)
+    create() {
+        return Decoration.none;
+    },
+    update(decorations, tr) {
+        decorations = decorations.map(tr.changes);
+        for (let e of tr.effects) {
+            if (e.is(setHighlights)) {
+                decorations = e.value;
+            }
+        }
+        return decorations;
+    },
+    provide: f => EditorView.decorations.from(f)
 });
 
 // 개행 문자를 \n으로 통일한 sampleHTML
@@ -98,7 +98,7 @@ const sampleHTML = `
 </body>
 
 </html>
-`.trim();
+`.trim() + '\n'.repeat(30);
 
 document.addEventListener('DOMContentLoaded', function () {
     const cssSelectorInput = document.getElementById('css-selector-input');
@@ -108,7 +108,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const normalizedSampleHTML = sampleHTML.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
     let codeEditor = new EditorView({
-        extensions: [basicSetup, xml(), highlightField, oneDark], // 테마 추가
+        extensions: [
+            basicSetup,
+            xml(),
+            highlightField,
+            oneDark,
+            EditorView.updateListener.of(update => {
+                if (update.docChanged) {
+                    updateCodeHighlighting();
+                }
+            })
+        ],
         parent: codeEditorElement
     });
 
@@ -119,7 +129,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 이벤트 리스너 등록
     cssSelectorInput.addEventListener('input', updateCodeHighlighting);
-    codeEditor.dom.addEventListener('input', updateCodeHighlighting);
+    codeEditor.dom.addEventListener('input', updateCodeHighlighting); // 작동안함.. 이벤트 발생 안함.
+    console.log(codeEditor);
 
     function updateCodeHighlighting() {
         const selector = cssSelectorInput.value.trim();
@@ -205,8 +216,8 @@ document.addEventListener('DOMContentLoaded', function () {
         let color;
         do {
             const hue = Math.floor(Math.random() * 360);
-            const saturation = Math.floor(Math.random() * 30) + 60; // 60-90% 사이의 채도
-            const lightness = Math.floor(Math.random() * 10) + 85; // 85-95% 사이의 명도
+            const saturation = Math.floor(Math.random() * 20) + 30; // 30-50% 사이의 채도
+            const lightness = Math.floor(Math.random() * 15) + 35; // 35-50% 사이의 명도
             color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
         } while (usedColors.has(color));
         usedColors.add(color);
@@ -215,4 +226,257 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 초기 하이라이트 업데이트
     updateCodeHighlighting();
+    {
+
+        const selectorExample = {
+            "selectors": [
+                {
+                    "selector": "body",
+                    "description": "문서의 body 요소를 선택합니다.",
+                    "example": "body { font-family: Arial, sans-serif; }"
+                },
+                {
+                    "selector": "#main-header",
+                    "description": "id가 'main-header'인 요소를 선택합니다.",
+                    "example": "#main-header { background-color: #f0f0f0; }"
+                },
+                {
+                    "selector": ".content-section",
+                    "description": "class가 'content-section'인 모든 요소를 선택합니다.",
+                    "example": ".content-section { margin-bottom: 20px; }"
+                },
+                {
+                    "selector": "h1",
+                    "description": "모든 h1 요소를 선택합니다.",
+                    "example": "h1 { font-size: 24px; }"
+                },
+                {
+                    "selector": "nav ul",
+                    "description": "nav 요소 내부의 모든 ul 요소를 선택합니다.",
+                    "example": "nav ul { list-style-type: none; }"
+                },
+                {
+                    "selector": "nav > ul",
+                    "description": "nav의 직접적인 자식인 ul 요소만 선택합니다.",
+                    "example": "nav > ul { display: flex; }"
+                },
+                {
+                    "selector": "a[href^='#']",
+                    "description": "href 속성이 '#'으로 시작하는 모든 a 요소를 선택합니다.",
+                    "example": "a[href^='#'] { color: #333; }"
+                },
+                {
+                    "selector": ".highlight",
+                    "description": "class가 'highlight'인 모든 요소를 선택합니다.",
+                    "example": ".highlight { background-color: yellow; }"
+                },
+                {
+                    "selector": "p.highlight",
+                    "description": "class가 'highlight'인 p 요소만 선택합니다.",
+                    "example": "p.highlight { font-weight: bold; }"
+                },
+                {
+                    "selector": ".special",
+                    "description": "class가 'special'인 모든 요소를 선택합니다.",
+                    "example": ".special { color: red; }"
+                },
+                {
+                    "selector": "ul.list-items li",
+                    "description": "class가 'list-items'인 ul 내부의 모든 li 요소를 선택합니다.",
+                    "example": "ul.list-items li { padding: 5px; }"
+                },
+                {
+                    "selector": ".box",
+                    "description": "class가 'box'인 모든 요소를 선택합니다.",
+                    "example": ".box { border: 1px solid #ccc; }"
+                },
+                {
+                    "selector": ".box.highlight",
+                    "description": "class가 'box'와 'highlight' 둘 다인 요소를 선택합니다.",
+                    "example": ".box.highlight { background-color: #ffff00; }"
+                },
+                {
+                    "selector": "#contact-form input",
+                    "description": "id가 'contact-form'인 요소 내부의 모든 input 요소를 선택합니다.",
+                    "example": "#contact-form input { width: 100%; }"
+                },
+                {
+                    "selector": "input[type='text']",
+                    "description": "type 속성이 'text'인 모든 input 요소를 선택합니다.",
+                    "example": "input[type='text'] { padding: 5px; }"
+                },
+                {
+                    "selector": "input[required]",
+                    "description": "required 속성을 가진 모든 input 요소를 선택합니다.",
+                    "example": "input[required] { border-color: red; }"
+                },
+                {
+                    "selector": "textarea",
+                    "description": "모든 textarea 요소를 선택합니다.",
+                    "example": "textarea { resize: vertical; }"
+                },
+                {
+                    "selector": "button[type='submit']",
+                    "description": "type 속성이 'submit'인 모든 button 요소를 선택합니다.",
+                    "example": "button[type='submit'] { background-color: green; }"
+                },
+                {
+                    "selector": "footer p",
+                    "description": "footer 요소 내부의 모든 p 요소를 선택합니다.",
+                    "example": "footer p { font-size: 12px; }"
+                },
+                {
+                    "selector": "section > *",
+                    "description": "section의 모든 직접적인 자식 요소를 선택합니다.",
+                    "example": "section > * { margin-bottom: 10px; }"
+                },
+                {
+                    "selector": "li:nth-child(odd)",
+                    "description": "부모 요소의 홀수 번째 자식인 li 요소를 선택합니다.",
+                    "example": "li:nth-child(odd) { background-color: #f0f0f0; }"
+                },
+                {
+                    "selector": ":not(.highlight)",
+                    "description": "class가 'highlight'가 아닌 모든 요소를 선택합니다.",
+                    "example": ":not(.highlight) { opacity: 0.8; }"
+                },
+                {
+                    "selector": "li:not(:first-of-type)",
+                    "description": "첫 번째를 제외한 모든 li 요소를 선택합니다.",
+                    "example": "li:not(:first-of-type) { margin-top: 30px; }"
+                },
+                {
+                    "selector": "*",
+                    "description": "모든 요소를 선택합니다.",
+                    "example": "* { box-sizing: border-box; }"
+                },
+                {
+                    "selector": "h2 ~ p",
+                    "description": "h2 요소 뒤에 오는 모든 p 요소를 선택합니다.",
+                    "example": "h2 ~ p { color: #666; }"
+                },
+                {
+                    "selector": "[class^='high']",
+                    "description": "class 속성이 'high'로 시작하는 모든 요소를 선택합니다.",
+                    "example": "[class^='high'] { padding: 10px; }"
+                },
+                {
+                    "selector": "[class$='highlight']",
+                    "description": "class 속성이 'highlight'로 끝나는 모든 요소를 선택합니다.",
+                    "example": "[class$='highlight'] { border: 2px solid yellow; }"
+                },
+                {
+                    "selector": "[class*='conten']",
+                    "description": "class 속성에 'conten'가 포함된 모든 요소를 선택합니다.",
+                    "example": "[class*='conten'] { max-width: 1200px; }"
+                },
+                {
+                    "selector": "input[type='email']",
+                    "description": "type 속성이 'email'인 모든 input 요소를 선택합니다.",
+                    "example": "input[type='email'] { border: 1px solid blue; }"
+                },
+                {
+                    "selector": "section[id='section2']",
+                    "description": "id가 'section2'인 section 요소를 선택합니다.",
+                    "example": "section[id='section2'] { background-color: #eee; }"
+                },
+                {
+                    "selector": "p[class='highlight']",
+                    "description": "class가 'highlight'인 p 요소를 선택합니다.",
+                    "example": "p[class='highlight'] { color: green; }"
+                },
+                {
+                    "selector": "header + main",
+                    "description": "header 요소 바로 다음에 오는 main 요소를 선택합니다.",
+                    "example": "header + main { margin-top: 20px; }"
+                },
+                {
+                    "selector": "main ~ footer",
+                    "description": "main 요소 뒤에 오는 모든 footer 요소를 선택합니다.",
+                    "example": "main ~ footer { border-top: 1px solid #ccc; }"
+                },
+                {
+                    "selector": "li:nth-child(3)",
+                    "description": "부모 요소의 세 번째 자식인 li 요소를 선택합니다.",
+                    "example": "li:nth-child(3) { font-weight: bold; }"
+                },
+                {
+                    "selector": "section[id]",
+                    "description": "id 속성을 가진 모든 section 요소를 선택합니다.",
+                    "example": "section[id] { padding: 10px; }"
+                },
+                {
+                    "selector": "nav ul li a[href$='section3']",
+                    "description": "href 속성이 'section3'으로 끝나는 모든 a 요소를 선택합니다.",
+                    "example": "a[href$='section3'] { color: orange; }"
+                }
+            ]
+        };
+
+        function adjustEditorMargin() {
+            const header = document.querySelector('.fixed-header');
+            const editorContainer = document.querySelector('.editor-container');
+            const headerHeight = header.offsetHeight;
+            editorContainer.style.marginTop = `${headerHeight}px`;
+        }
+
+        // 페이지 로드 시 실행
+        window.addEventListener('load', adjustEditorMargin);
+
+        // 창 크기 변경 시 실행
+        window.addEventListener('resize', adjustEditorMargin);
+
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        let resizeTimer;
+        window.addEventListener('resize', function () {
+            document.body.classList.add('resize-animation-stopper');
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                document.body.classList.remove('resize-animation-stopper');
+            }, 400);
+        });
+
+        document.querySelector('.menu-icon').addEventListener('click', function () {
+            const sidePanel = document.querySelector('.side-panel');
+            const mainContent = document.querySelector('.main-content');
+
+            sidePanel.classList.toggle('open');
+            mainContent.classList.toggle('shrink');
+
+            // 사이드 패널에 셀렉터 예제 추가
+            const sidePanelContent = selectorExample.selectors.map(item => `
+                <div class="selector-item" data-selector="${item.selector}">
+                    <h3>${item.selector}</h3>
+                    <p>${item.description}</p>
+                </div>
+            `).join('');
+
+            sidePanel.innerHTML = `
+                <h2>CSS 셀렉터 예제</h2>
+                ${sidePanelContent}
+            `;
+
+            // 셀렉터 항목에 클릭 이벤트 리스너 추가
+            sidePanel.querySelectorAll('.selector-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    const selector = this.getAttribute('data-selector');
+                    cssSelectorInput.value = selector;
+                    cssSelectorInput.dispatchEvent(new Event('input'));
+                });
+            });
+
+            // 에디터 크기 조정
+            // if (editor) {
+            //     setTimeout(() => {
+            //         editor.layout();
+            //     }, 300);
+            // }
+        });
+
+    }
 });
