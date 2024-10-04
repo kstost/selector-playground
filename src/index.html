@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>코드깎는노인 클래스 - CSS 셀렉터 연습장</title>
+    <title>코드깎는노인 클래스 - AI 🧠 CSS 셀렉터 연습장</title>
     <meta property="og:image" content="https://cokac.com/selector/og_image.jpg">
-    <meta property="og:title" content="코드깎는노인 클래스 - CSS 셀렉터 연습장">
+    <meta property="og:title" content="코드깎는노인 클래스 - AI 🧠 CSS 셀렉터 연습장">
     <meta property="og:description" content="CSS 셀렉터를 연습하고 배울 수 있는 인터랙티브 플레이그라운드입니다.">
     <meta property="og:url" content="https://cokac.com/selector">
     <meta property="og:type" content="website">
@@ -27,9 +27,10 @@
         }
 
         /* 입력란 스타일 */
-        #css-selector-input {
+        #css-selector-input,
+        #prompt-input {
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             font-size: 16px;
             box-sizing: border-box;
             border: none;
@@ -43,6 +44,11 @@
             ::placeholder {
                 color: rgba(255, 255, 255, 0.5);
             }
+        }
+
+        #prompt-input {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #FFFF99;
         }
 
         /* 코드 에디터가 남은 공간을 모두 차지하도록 설정 */
@@ -122,9 +128,10 @@
                 font-size: 1em;
             }
 
-            #css-selector-input {
-                font-size: 14px;
-                padding: 8px;
+            #css-selector-input,
+            #prompt-input {
+                font-size: 16px;
+                padding: 9px;
             }
 
             .container {
@@ -314,10 +321,12 @@
             <h1>
                 <div class="title-container">
                     <img src="https://cokac.com/android-icon-192x192.png" alt="코드깎는노인 클래스" width="30" height="30">
-                    <span class="main-title">CSS 셀렉터 연습장</span>
+                    <span class="main-title">AI 🧠 CSS 셀렉터 연습장</span>
                 </div>
                 <p class="subtitle"><a href="https://cokac.com/" target="_blank">코드깎는노인 클래스</a></p>
             </h1>
+            <input type="text" id="prompt-input" autocomplete="off"
+                placeholder="AI에게 셀렉터 생성요청 (예: class가 content-section인 모든 요소를 선택합니다)" value="" />
             <input type="text" id="css-selector-input" autocomplete="off"
                 placeholder="CSS 선택자 입력 (예: #section1, .list-items, header > nav)" value="" />
         </div>

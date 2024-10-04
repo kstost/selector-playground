@@ -101,6 +101,7 @@ const sampleHTML = `
 `.trim() + '\n'.repeat(30);
 
 document.addEventListener('DOMContentLoaded', function () {
+    const promptInput = document.getElementById('prompt-input');
     const cssSelectorInput = document.getElementById('css-selector-input');
     const codeEditorElement = document.getElementById('code-editor');
 
@@ -465,7 +466,9 @@ document.addEventListener('DOMContentLoaded', function () {
             sidePanel.querySelectorAll('.selector-item').forEach(item => {
                 item.addEventListener('click', function () {
                     const selector = this.getAttribute('data-selector');
+                    const description = this.querySelector('p').textContent;
                     cssSelectorInput.value = selector;
+                    promptInput.value = description;
                     cssSelectorInput.dispatchEvent(new Event('input'));
                 });
             });
@@ -478,5 +481,56 @@ document.addEventListener('DOMContentLoaded', function () {
             // }
         });
 
+        let currentRequestId = 0;
+
+        promptInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                const prompt = promptInput.value.trim();
+                if (prompt) {
+                    const requestId = ++currentRequestId;
+
+                    const clockEmojis = ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'];
+                    let emojiIndex = 0;
+
+                    function updateLoadingAnimation() {
+                        if (requestId !== currentRequestId) return;
+                        cssSelectorInput.value = `${clockEmojis[emojiIndex]} 🤖 셀렉터 생성중${'.'.repeat((emojiIndex % 3) + 1)}`;
+                        emojiIndex = (emojiIndex + 1) % clockEmojis.length;
+                    }
+
+                    let loadingAnimationId = setInterval(updateLoadingAnimation, 100);
+
+                    // 처리 중 글씨색 투명도 설정
+                    cssSelectorInput.style.color = 'rgba(255, 255, 255, 0.5)';
+
+                    fetch('https://cokac.com/aiselector', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ prompt: prompt })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (requestId === currentRequestId) {
+                                cssSelectorInput.value = data.selector_string;
+                                cssSelectorInput.dispatchEvent(new Event('input'));
+                            }
+                        })
+                        .catch(error => {
+                            if (requestId === currentRequestId) {
+                                cssSelectorInput.value = '';
+                                console.error('요청 처리 중 오류 발생:', error);
+                            }
+                        })
+                        .finally(() => {
+                            if (requestId === currentRequestId) {
+                                clearInterval(loadingAnimationId);
+                                cssSelectorInput.style.color = ''; // 글씨색 원래대로 복원
+                            }
+                        });
+                }
+            }
+        });
     }
 });
